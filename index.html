@@ -71,7 +71,7 @@
       margin-top: 6px;
     }
 
-    /* BARRA DE CATEGORÍAS (BOTONES) */
+    /* BARRA DE CATEGORÍAS */
     .categories-container {
       padding: 18px 16px 10px;
       max-width: 600px;
@@ -415,12 +415,12 @@
   <div class="categories-container">
     <div class="categories-title">Selecciona una Categoría:</div>
     <div class="categories">
-      <button class="cat-btn active" onclick="filterCategory('salchipapa', this)">🍟 Salchipapas</button>
-      <button class="cat-btn" onclick="filterCategory('papipollo', this)">🍗 Papipollos</button>
+      <button class="cat-btn active" onclick="filterCategory('papipollo', this)">🍗 Papi Pollo</button>
+      <button class="cat-btn" onclick="filterCategory('salchipapa', this)">🍟 Salchipapas</button>
       <button class="cat-btn" onclick="filterCategory('popcorn', this)">🍿 Popcorn de Pechuga</button>
       <button class="cat-btn" onclick="filterCategory('hamburguesas', this)">🍔 Hamburguesas</button>
       <button class="cat-btn" onclick="filterCategory('bebidas', this)">🥤 Bebidas</button>
-      <button class="cat-btn" onclick="filterCategory('extras', this)">🧀 Extras & Salsas</button>
+      <button class="cat-btn" onclick="filterCategory('extras', this)">🧀 Salsas</button>
     </div>
   </div>
 
@@ -481,48 +481,97 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    // ⚙️ CAMBIA ESTE NÚMERO POR TU WHATSAPP CON CÓDIGO DE PAÍS (Ej: 593 para Ecuador)
+    // ⚙️ NÚMERO DE WHATSAPP DEL NEGOCO
     const WHATSAPP_PHONE = "593982565003";
 
-    // BASE DE DATOS DE PRODUCTOS
+    // BASE DE DATOS DE PRODUCTOS ACTUALIZADA
     const products = [
-      // 🍟 SALCHIPAPAS
-      { id: 1, category: 'salchipapa', name: 'Salchipapa Clásica', desc: 'Papas crujientes con abundantes salchichas doradas y salsas a elección.', price: 2.50 },
-      { id: 2, category: 'salchipapa', name: 'Salchipapa Especial', desc: 'Papas fritas, doble salchicha, tocino crujiente y fundido de queso cheddar.', price: 3.75 },
+      // 🍗 PAPI POLLO
+      { 
+        id: 1, 
+        category: 'papipollo', 
+        name: 'Papi Pollo', 
+        desc: 'Papas fritas crujientes con presa de pollo doradita y sazonada.', 
+        price: 2.50 
+      },
 
-      // 🍗 PAPIPOLLOS
-      { id: 3, category: 'papipollo', name: 'Papipollo Tradicional', desc: 'Papas fritas crujientes acompañadas de 1 presa de pollo bien doradita.', price: 3.50 },
-      { id: 4, category: 'papipollo', name: 'Papipollo Especial', desc: 'Papas fritas, presa de pollo jugosa, huevo frito y ensalada especial.', price: 4.50 },
+      // 🍟 SALCHIPAPAS
+      { 
+        id: 2, 
+        category: 'salchipapa', 
+        name: 'Salchipapa', 
+        desc: 'Porción generosa de papas crujientes con salchichas doradas.', 
+        price: 1.50 
+      },
 
       // 🍿 POPCORN DE PECHUGA DE POLLO
-      { id: 5, category: 'popcorn', name: 'Popcorn de Pechuga Personal', desc: 'Bocados crujientes de pura pechuga de pollo empanizada con papas.', price: 3.75 },
-      { id: 6, category: 'popcorn', name: 'Popcorn de Pechuga Grande', desc: 'Doble porción de popcorn de pechuga, porción extra de papas y 2 salsas.', price: 5.50 },
+      { 
+        id: 3, 
+        category: 'popcorn', 
+        name: 'Popcorn de Pechuga', 
+        desc: 'Bocados crujientes de pechuga de pollo acompañados con papas fritas.', 
+        price: 2.50 
+      },
 
       // 🍔 HAMBURGUESAS
-      { id: 7, category: 'hamburguesas', name: 'Hamburguesa de Pollo Crispy', desc: 'Pechuga empanizada crujiente, queso, lechuga, tomate y salsa especial + papas.', price: 3.50 },
-      { id: 8, category: 'hamburguesas', name: 'Hamburguesa Doble Carne & Queso', desc: 'Doble carne jugosa, doble queso cheddar, tocino y salsa de la casa + papas.', price: 4.50 },
+      { 
+        id: 4, 
+        category: 'hamburguesas', 
+        name: 'Hamburguesa Normal', 
+        desc: 'hamburguesa normal + porción pequeña de papas + 3 salsas.', 
+        price: 2.00 
+      },
+      { 
+        id: 5, 
+        category: 'hamburguesas', 
+        name: 'Hamburguesa Completa', 
+        desc: 'hamburguesa con huevo frito y tocino + porción mediana de papas + 3 salsas + bebida.', 
+        price: 3.50 
+      },
 
       // 🥤 BEBIDAS
-      { id: 9, category: 'bebidas', name: 'Coca Cola Personal', desc: '500ml bien helada', price: 0.80 },
-      { id: 10, category: 'bebidas', name: 'Fioravanti Personal', desc: '500ml bien helada', price: 0.80 },
-      { id: 11, category: 'bebidas', name: 'Sprite Personal', desc: '500ml bien helada', price: 0.80 },
+      { 
+        id: 6, 
+        category: 'bebidas', 
+        name: 'Bebida', 
+        desc: 'Bebida bien helada a elección.', 
+        price: 0.50 
+      },
 
-      // 🧀 EXTRAS & SALSAS
-      { id: 12, category: 'extras', name: 'Salsa de Ajo Especial', desc: 'Receta artesanal de la casa', price: 0.30 },
-      { id: 13, category: 'extras', name: 'Fundido de Queso Cheddar', desc: 'Porción de queso caliente', price: 0.50 },
-      { id: 14, category: 'extras', name: 'Porción Extra de Papas', desc: 'Papas fritas adicionales', price: 1.25 }
+      // 🧀 SALSAS
+      { 
+        id: 7, 
+        category: 'extras', 
+        name: 'Mayonesa', 
+        desc: 'Salsa cremosa de mayonesa.', 
+        price: 0.30 
+      },
+      { 
+        id: 8, 
+        category: 'extras', 
+        name: 'Salsa de Tomate', 
+        desc: 'Salsa clásica de tomate.', 
+        price: 0.30 
+      },
+      { 
+        id: 9, 
+        category: 'extras', 
+        name: 'Salsa de la Casa', 
+        desc: 'Sabor especial secreto de la casa.', 
+        price: 0.30 
+      }
     ];
 
     let cart = [];
 
-    function renderProducts(filter = 'salchipapa') {
+    function renderProducts(filter = 'papipollo') {
       const container = document.getElementById('menuContainer');
       container.innerHTML = '';
 
       const filtered = products.filter(p => p.category === filter);
 
       if (filtered.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:30px;">No hay productos disponible en esta categoría.</p>';
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:30px;">No hay productos disponibles en esta categoría.</p>';
         return;
       }
 
@@ -664,8 +713,8 @@
       window.open(whatsappUrl, '_blank');
     }
 
-    // Inicializar vista por defecto
-    renderProducts('salchipapa');
+    // Cargar categoría inicial
+    renderProducts('papipollo');
   </script>
 </body>
 </html>
