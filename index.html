@@ -417,10 +417,8 @@
     <div class="categories">
       <button class="cat-btn active" onclick="filterCategory('papipollo', this)">🍗 Papi Pollo</button>
       <button class="cat-btn" onclick="filterCategory('salchipapa', this)">🍟 Salchipapas</button>
-      <button class="cat-btn" onclick="filterCategory('popcorn', this)">🍿 Popcorn de Pechuga</button>
       <button class="cat-btn" onclick="filterCategory('hamburguesas', this)">🍔 Hamburguesas</button>
-      <button class="cat-btn" onclick="filterCategory('bebidas', this)">🥤 Bebidas</button>
-      <button class="cat-btn" onclick="filterCategory('extras', this)">🧀 Salsas</button>
+      <button class="cat-btn" onclick="filterCategory('extras', this)">🥤 Extras & Bebidas</button>
     </div>
   </div>
 
@@ -481,7 +479,7 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    // ⚙️ NÚMERO DE WHATSAPP DEL NEGOCO
+    // ⚙️ NÚMERO DE WHATSAPP DEL NEGOCIO
     const WHATSAPP_PHONE = "593982565003";
 
     // BASE DE DATOS DE PRODUCTOS ACTUALIZADA
@@ -490,27 +488,25 @@
       { 
         id: 1, 
         category: 'papipollo', 
-        name: 'Papi Pollo', 
+        name: 'Papi Pollo Tradicional', 
         desc: 'Papas fritas crujientes con presa de pollo doradita y sazonada.', 
         price: 2.50 
+      },
+      { 
+        id: 2, 
+        category: 'papipollo', 
+        name: 'Papi Pollo con Popcorn', 
+        desc: 'Papas fritas crujientes acompañadas de Popcorn de Pollo.', 
+        price: 2.00 
       },
 
       // 🍟 SALCHIPAPAS
       { 
-        id: 2, 
+        id: 3, 
         category: 'salchipapa', 
         name: 'Salchipapa', 
         desc: 'Porción generosa de papas crujientes con salchichas doradas.', 
         price: 1.50 
-      },
-
-      // 🍿 POPCORN DE PECHUGA DE POLLO
-      { 
-        id: 3, 
-        category: 'popcorn', 
-        name: 'Popcorn de Pechuga', 
-        desc: 'Bocados crujientes de pechuga de pollo acompañados con papas fritas.', 
-        price: 2.50 
       },
 
       // 🍔 HAMBURGUESAS
@@ -529,32 +525,51 @@
         price: 3.50 
       },
 
-      // 🥤 BEBIDAS
+      // 🥤 EXTRAS & BEBIDAS
       { 
         id: 6, 
-        category: 'bebidas', 
+        category: 'extras', 
         name: 'Bebida', 
         desc: 'Bebida bien helada a elección.', 
         price: 0.50 
       },
-
-      // 🧀 SALSAS
       { 
         id: 7, 
+        category: 'extras', 
+        name: 'Presa de Pollo - Pierna', 
+        desc: 'Pierna de pollo dorada y sazonada.', 
+        price: 1.50 
+      },
+      { 
+        id: 8, 
+        category: 'extras', 
+        name: 'Presa de Pollo - Pos Pierna', 
+        desc: 'Pos pierna de pollo dorada y sazonada.', 
+        price: 1.50 
+      },
+      { 
+        id: 9, 
+        category: 'extras', 
+        name: 'Presa de Pollo - Popcorn', 
+        desc: 'Porción de popcorn de pollo crujiente.', 
+        price: 1.50 
+      },
+      { 
+        id: 10, 
         category: 'extras', 
         name: 'Mayonesa', 
         desc: 'Salsa cremosa de mayonesa.', 
         price: 0.30 
       },
       { 
-        id: 8, 
+        id: 11, 
         category: 'extras', 
         name: 'Salsa de Tomate', 
         desc: 'Salsa clásica de tomate.', 
         price: 0.30 
       },
       { 
-        id: 9, 
+        id: 12, 
         category: 'extras', 
         name: 'Salsa de la Casa', 
         desc: 'Sabor especial secreto de la casa.', 
