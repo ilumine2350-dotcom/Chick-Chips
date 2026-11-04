@@ -216,11 +216,21 @@
             flex-direction: column;
             justify-content: space-between;
             transition: transform 0.2s, border-color 0.2s;
+            overflow: hidden;
         }
 
         .product-card:hover {
             transform: translateY(-3px);
             border-color: rgba(255, 82, 50, 0.5);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background-color: #000;
         }
 
         .product-header {
@@ -648,7 +658,7 @@
     </div>
 
     <script>
-        // DATOS DEL MENÚ ACTUALIZADOS
+        // DATOS DEL MENÚ
         const menuProducts = [
             // COMBOS DE PAPIPOLLO
             {
@@ -658,6 +668,7 @@
                 desc: '1 Presa de pollo frito + papas fritas + Pepsi personal',
                 price: 2.80,
                 badge: 'Económico',
+                image: 'combo1.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -668,6 +679,7 @@
                 desc: '2 Presas de pollo frito + papas fritas + Pepsi personal',
                 price: 3.80,
                 badge: 'Recomendado',
+                image: 'combo2.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -678,6 +690,7 @@
                 desc: '3 Presas de pollo frito + papas fritas + Pepsi personal',
                 price: 4.85,
                 badge: 'Más vendido',
+                image: 'combo3.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -688,6 +701,7 @@
                 desc: '8 Alitas broster + porción grande de papas fritas + Pepsi',
                 price: 8.00,
                 badge: 'Familiar',
+                image: 'combo_familiar.jpg',
                 hasSauceOptions: true,
                 isLargeContainer: true,
                 sauceChoices: [
@@ -699,7 +713,7 @@
                     'Mitad Original / Mitad Picante'
                 ]
             },
-            // NUEVO: COMBOS DE ARROZ Y MENESTRA
+            // COMBOS DE ARROZ Y MENESTRA
             {
                 id: 13,
                 category: 'arroz',
@@ -707,6 +721,7 @@
                 desc: 'Presa de pollo broster, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
                 price: 3.50,
                 badge: 'Ideal',
+                image: 'combo_ideal.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -717,6 +732,7 @@
                 desc: '2 presas, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
                 price: 4.95,
                 badge: 'Más vendido',
+                image: 'combo_mas_vendido.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -727,6 +743,7 @@
                 desc: 'Presa de pollo más 3 alitas, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
                 price: 4.50,
                 badge: 'Especial',
+                image: 'mega_combo_alitas.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -738,6 +755,7 @@
                 desc: 'Hamburguesa + papas fritas + Pepsi personal',
                 price: 3.50,
                 badge: 'Especial',
+                image: 'combo_hamburguesa.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -749,6 +767,7 @@
                 desc: 'papas fritas + salchicha + bebida personal Pepsi',
                 price: 2.00,
                 badge: 'Popular',
+                image: 'combo_salchipapa.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
@@ -759,10 +778,11 @@
                 desc: 'papas fritas + salchicha + salsas',
                 price: 1.50,
                 badge: 'Clásica',
+                image: 'salchipapa_normal.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
-            // ADICIONALES (BEBIDAS Y SALSAS - NO LLEVAN CONTENEDOR GRANDE)
+            // ADICIONALES
             {
                 id: 8,
                 category: 'extras',
@@ -770,6 +790,7 @@
                 desc: 'Bebida refrescante individual',
                 price: 0.50,
                 badge: 'Bebida',
+                image: 'pepsi.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: false
             },
@@ -780,6 +801,7 @@
                 desc: 'Porción adicional de mayonesa',
                 price: 0.25,
                 badge: 'Salsa',
+                image: 'mayonesa.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: false
             },
@@ -790,6 +812,7 @@
                 desc: 'Porción adicional de salsa de tomate',
                 price: 0.25,
                 badge: 'Salsa',
+                image: 'salsa_tomate.jpg',
                 hasSauceOptions: false,
                 isLargeContainer: false
             },
@@ -800,6 +823,7 @@
                 desc: 'Salsa adicional miel mostaza',
                 price: 0.25,
                 badge: 'Salsa',
+                image: 'miel_mostaza.jpg',
                 hasSauceOptions: true,
                 isLargeContainer: false,
                 sauceChoices: [
@@ -814,6 +838,7 @@
                 desc: 'Salsa adicional BBQ',
                 price: 0.25,
                 badge: 'Salsa',
+                image: 'bbq.jpg',
                 hasSauceOptions: true,
                 isLargeContainer: false,
                 sauceChoices: [
@@ -825,7 +850,14 @@
 
         let cart = [];
 
-        // RENDERIZAR MENÚ
+        function handleImageError(imgElement) {
+            if (imgElement.src.endsWith('.jpg')) {
+                imgElement.src = imgElement.src.replace('.jpg', '.jpeg');
+            } else {
+                imgElement.style.display = 'none';
+            }
+        }
+
         function renderMenu(category = 'todos') {
             const container = document.getElementById('menuGrid');
             container.innerHTML = '';
@@ -853,6 +885,7 @@
 
                 card.innerHTML = `
                     <div>
+                        <img src="${p.image}" alt="${p.name}" class="product-img" onerror="handleImageError(this)">
                         <div class="product-header">
                             <div class="product-title">${p.name}</div>
                             <span class="product-badge">${p.badge}</span>
@@ -871,14 +904,12 @@
             });
         }
 
-        // FILTRAR CATEGORÍAS
         function filterMenu(cat, btn) {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderMenu(cat);
         }
 
-        // AGREGAR AL CARRITO
         function addToCart(productId) {
             const product = menuProducts.find(p => p.id === productId);
             
@@ -903,7 +934,6 @@
             updateCartUI();
         }
 
-        // CAMBIAR CANTIDAD
         function changeQty(productId, selectedSauce, delta) {
             const itemIndex = cart.findIndex(i => i.id === productId && i.selectedSauce === selectedSauce);
             if (itemIndex === -1) return;
@@ -916,7 +946,6 @@
             updateCartUI();
         }
 
-        // MOSTRAR U OCULTAR CAMPO DE DIRECCIÓN Y NOTAS DE ENVÍO
         function handleDeliveryChange() {
             const deliveryType = document.getElementById('deliveryOption').value;
             const addressGroup = document.getElementById('addressGroup');
@@ -939,7 +968,6 @@
             updateCartUI();
         }
 
-        // ACTUALIZAR INTERFAZ DEL CARRITO
         function updateCartUI() {
             const cartItemsContainer = document.getElementById('cartItems');
             const cartBadge = document.getElementById('cartBadge');
@@ -951,7 +979,6 @@
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            // Calcular cargos adicionales (Envío o Contenedores)
             const deliveryType = document.getElementById('deliveryOption') ? document.getElementById('deliveryOption').value : 'pickup';
             let extraFee = 0;
 
@@ -1003,13 +1030,11 @@
             `).join('');
         }
 
-        // MOSTRAR/OCULTAR MODAL CARRITO
         function toggleCart() {
             const modal = document.getElementById('cartModal');
             modal.classList.toggle('open');
         }
 
-        // ENVIAR POR WHATSAPP
         function sendWhatsAppOrder() {
             if (cart.length === 0) {
                 alert('Añade al menos un producto al carrito antes de hacer tu pedido.');
@@ -1087,7 +1112,6 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        // INICIALIZACIÓN
         renderMenu();
         handleDeliveryChange();
     </script>
