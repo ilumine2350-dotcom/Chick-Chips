@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chick & Chips - El combo perfecto de tu día</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF5232;
+            --primary-hover: #E03E20;
+            --secondary: #FFB800;
+            --dark-bg: #121212;
+            --card-bg: #1E1E1E;
+            --card-hover: #262626;
+            --text-light: #F5F5F5;
+            --text-muted: #AAAAAA;
+            --border-color: #333333;
+            --whatsapp-color: #25D366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding-bottom: 80px;
+        }
+
+        /* HEADER */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .brand-text h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .cart-icon-btn {
+            position: relative;
+            background: #252525;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cart-icon-btn:hover {
+            background: var(--primary);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--dark-bg);
+        }
+
+        /* HERO BANNER */
+        .hero {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #2a0804 0%, #1a1a1a 100%);
+            border: 1px solid rgba(255, 82, 50, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-tag {
+            align-self: flex-start;
+            background: var(--secondary);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* CATEGORIES NAV */
+        .categories-nav {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .categories-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* MAIN CONTENT & MENU */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 82, 50, 0.5);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .product-badge {
+            font-size: 0.65rem;
+            background: #333;
+            color: var(--secondary);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .product-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        /* OPCIONES DINÁMICAS (SALSA / OPCIONALES) */
+        .sauce-options {
+            margin-bottom: 15px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .sauce-options label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .sauce-select {
+            width: 100%;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .sauce-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        .add-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+
+        .add-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* MODAL CARRITO */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            justify-content: flex-end;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .cart-drawer {
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            background-color: var(--dark-bg);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h2 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .cart-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+        }
+
+        .cart-empty i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-info p {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 2px;
+        }
+
+        .cart-item-info span {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-bg);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .delivery-info-note {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-top: 4px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin: 15px 0 5px 0;
+        }
+
+        .total-price {
+            color: var(--secondary);
+        }
+
+        .btn-send-whatsapp {
+            width: 100%;
+            background-color: var(--whatsapp-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-send-whatsapp:hover {
+            opacity: 0.9;
+        }
+
+        /* FLOATING CART BAR FOR MOBILE */
+        .floating-cart-bar {
+            position: fixed;
+            bottom: 15px;
+            left: 20px;
+            right: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(255, 82, 50, 0.4);
+            cursor: pointer;
+            z-index: 90;
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+        }
+
+        .floating-cart-bar.visible {
+            transform: translateY(0);
+        }
+
+        .floating-cart-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <div class="brand">
+                <img src="./logo.png" alt="Chick & Chips Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23FF5232\' rx=\'15\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'35\' font-weight=\'bold\'>C&C</text></svg>';">
+                <div class="brand-text">
+                    <h1>Chick & Chips</h1>
+                    <span>El combo perfecto de tu día</span>
+                </div>
+            </div>
+            <button class="cart-icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <div class="cart-badge" id="cartBadge">0</div>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-card">
+            <span class="hero-tag">¡Haz tu pedido en línea!</span>
+            <h2>Sabor crujiente a tu puerta 🍗🍟</h2>
+            <p>Añade tus antojos al carrito y envía el pedido por WhatsApp al instante.</p>
+        </div>
+    </section>
+
+    <!-- CATEGORÍAS -->
+    <nav class="categories-nav">
+        <button class="cat-btn active" onclick="filterMenu('todos', this)">🔥 Todos</button>
+        <button class="cat-btn" onclick="filterMenu('combos', this)">🍗 Combos Papipollo</button>
+        <button class="cat-btn" onclick="filterMenu('arroz', this)">🍚 Arroz y Menestra</button>
+        <button class="cat-btn" onclick="filterMenu('hamburguesa', this)">🍔 Hamburguesa</button>
+        <button class="cat-btn" onclick="filterMenu('salchipapa', this)">🍟 Salchipapa</button>
+        <button class="cat-btn" onclick="filterMenu('extras', this)">➕ Adicionales</button>
+    </nav>
+
+    <!-- MENÚ -->
+    <main>
+        <div class="menu-grid" id="menuGrid">
+            <!-- Los productos se cargan dinámicamente -->
+        </div>
+    </main>
+
+    <!-- BARRA FLOTANTE CARRITO -->
+    <div class="floating-cart-bar" id="floatingCart" onclick="toggleCart()">
+        <div class="floating-cart-info">
+            <i class="fa-solid fa-basket-shopping"></i>
+            <span id="floatCount">0 items</span>
+        </div>
+        <div style="font-weight: 800;" id="floatTotal">$0.00</div>
+    </div>
+
+    <!-- MODAL CARRITO / CHECKOUT -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="cart-drawer">
+            <div class="cart-header">
+                <h2><i class="fa-solid fa-cart-shopping" style="color: var(--primary);"></i> Tu Pedido</h2>
+                <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="cart-body" id="cartItems">
+                <!-- Items del carrito -->
+            </div>
+
+            <div class="cart-footer">
+                <div class="form-group">
+                    <label>Tu Nombre *</label>
+                    <input type="text" id="clientName" class="form-control" placeholder="Ej. Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Entrega *</label>
+                    <select id="deliveryOption" class="form-control" onchange="handleDeliveryChange()">
+                        <option value="pickup">Comer en el local ($0.00)</option>
+                        <option value="takeout">Para llevar (+$0.25 por contenedor grande)</option>
+                        <option value="carmen">Domicilio en El Carmen Manabí (+$2.00)</option>
+                        <option value="outside">Domicilio fuera de la ciudad (Acordar valor)</option>
+                    </select>
+                    <div class="delivery-info-note" id="deliveryNote"></div>
+                </div>
+
+                <div class="form-group" id="addressGroup" style="display: none;">
+                    <label>Dirección de Entrega *</label>
+                    <input type="text" id="clientAddress" class="form-control" placeholder="Ej. Av. Principal y Calle 2">
+                </div>
+
+                <div class="form-group">
+                    <label>Notas adicionales</label>
+                    <input type="text" id="clientNotes" class="form-control" placeholder="Ej. Sin mayonesa, cambio de $10">
+                </div>
+
+                <div class="total-row">
+                    <span>Total:</span>
+                    <span class="total-price" id="cartTotal">$0.00</span>
+                </div>
+
+                <button class="btn-send-whatsapp" onclick="sendWhatsAppOrder()">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATOS DEL MENÚ ACTUALIZADOS
+        const menuProducts = [
+            // COMBOS DE PAPIPOLLO
+            {
+                id: 1,
+                category: 'combos',
+                name: 'Combo 1 Presa',
+                desc: '1 Presa de pollo frito + papas fritas + Pepsi personal',
+                price: 2.80,
+                badge: 'Económico',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            {
+                id: 2,
+                category: 'combos',
+                name: 'Combo 2 Presas',
+                desc: '2 Presas de pollo frito + papas fritas + Pepsi personal',
+                price: 3.80,
+                badge: 'Recomendado',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            {
+                id: 3,
+                category: 'combos',
+                name: 'Combo 3 Presas',
+                desc: '3 Presas de pollo frito + papas fritas + Pepsi personal',
+                price: 4.85,
+                badge: 'Más vendido',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            {
+                id: 4,
+                category: 'combos',
+                name: 'Combo Familiar (8 Alitas Broster)',
+                desc: '8 Alitas broster + porción grande de papas fritas + Pepsi',
+                price: 8.00,
+                badge: 'Familiar',
+                hasSauceOptions: true,
+                isLargeContainer: true,
+                sauceChoices: [
+                    'Salsa BBQ Original',
+                    'Salsa BBQ Picante',
+                    'Salsa Miel Mostaza Original',
+                    'Salsa Miel Mostaza Picante',
+                    'Mitad y Mitad (BBQ / Miel Mostaza)',
+                    'Mitad Original / Mitad Picante'
+                ]
+            },
+            // NUEVO: COMBOS DE ARROZ Y MENESTRA
+            {
+                id: 13,
+                category: 'arroz',
+                name: 'Combo Ideal',
+                desc: 'Presa de pollo broster, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
+                price: 3.50,
+                badge: 'Ideal',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            {
+                id: 14,
+                category: 'arroz',
+                name: 'Combo Más Vendido',
+                desc: '2 presas, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
+                price: 4.95,
+                badge: 'Más vendido',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            {
+                id: 15,
+                category: 'arroz',
+                name: 'Mega Combo Alitas',
+                desc: 'Presa de pollo más 3 alitas, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
+                price: 4.50,
+                badge: 'Especial',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            // COMBO HAMBURGUESA
+            {
+                id: 5,
+                category: 'hamburguesa',
+                name: 'Combo Hamburguesa',
+                desc: 'Hamburguesa + papas fritas + Pepsi personal',
+                price: 3.50,
+                badge: 'Especial',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            // COMBOS DE SALCHIPAPA
+            {
+                id: 6,
+                category: 'salchipapa',
+                name: 'Combo Salchipapa',
+                desc: 'papas fritas + salchicha + bebida personal Pepsi',
+                price: 2.00,
+                badge: 'Popular',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            {
+                id: 7,
+                category: 'salchipapa',
+                name: 'Salchipapa Normal',
+                desc: 'papas fritas + salchicha + salsas',
+                price: 1.50,
+                badge: 'Clásica',
+                hasSauceOptions: false,
+                isLargeContainer: true
+            },
+            // ADICIONALES (BEBIDAS Y SALSAS - NO LLEVAN CONTENEDOR GRANDE)
+            {
+                id: 8,
+                category: 'extras',
+                name: 'Pepsi personal',
+                desc: 'Bebida refrescante individual',
+                price: 0.50,
+                badge: 'Bebida',
+                hasSauceOptions: false,
+                isLargeContainer: false
+            },
+            {
+                id: 9,
+                category: 'extras',
+                name: 'Mayonesa',
+                desc: 'Porción adicional de mayonesa',
+                price: 0.25,
+                badge: 'Salsa',
+                hasSauceOptions: false,
+                isLargeContainer: false
+            },
+            {
+                id: 10,
+                category: 'extras',
+                name: 'Salsa de tomate',
+                desc: 'Porción adicional de salsa de tomate',
+                price: 0.25,
+                badge: 'Salsa',
+                hasSauceOptions: false,
+                isLargeContainer: false
+            },
+            {
+                id: 11,
+                category: 'extras',
+                name: 'Miel mostaza',
+                desc: 'Salsa adicional miel mostaza',
+                price: 0.25,
+                badge: 'Salsa',
+                hasSauceOptions: true,
+                isLargeContainer: false,
+                sauceChoices: [
+                    'Original',
+                    'Picante'
+                ]
+            },
+            {
+                id: 12,
+                category: 'extras',
+                name: 'BBQ',
+                desc: 'Salsa adicional BBQ',
+                price: 0.25,
+                badge: 'Salsa',
+                hasSauceOptions: true,
+                isLargeContainer: false,
+                sauceChoices: [
+                    'Original',
+                    'Picante'
+                ]
+            }
+        ];
+
+        let cart = [];
+
+        // RENDERIZAR MENÚ
+        function renderMenu(category = 'todos') {
+            const container = document.getElementById('menuGrid');
+            container.innerHTML = '';
+
+            const filtered = category === 'todos' 
+                ? menuProducts 
+                : menuProducts.filter(p => p.category === category);
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                let sauceHTML = '';
+                if (p.hasSauceOptions && p.sauceChoices) {
+                    let labelText = p.name.includes('Familiar') ? 'Elige tu salsa:' : 'Elige el tipo:';
+                    sauceHTML = `
+                        <div class="sauce-options">
+                            <label><i class="fa-solid fa-bowl-food"></i> ${labelText}</label>
+                            <select id="sauce-${p.id}" class="sauce-select">
+                                ${p.sauceChoices.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="product-header">
+                            <div class="product-title">${p.name}</div>
+                            <span class="product-badge">${p.badge}</span>
+                        </div>
+                        <div class="product-desc">${p.desc}</div>
+                        ${sauceHTML}
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">$${p.price.toFixed(2)}</div>
+                        <button class="add-btn" onclick="addToCart(${p.id})">
+                            <i class="fa-solid fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // FILTRAR CATEGORÍAS
+        function filterMenu(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(cat);
+        }
+
+        // AGREGAR AL CARRITO
+        function addToCart(productId) {
+            const product = menuProducts.find(p => p.id === productId);
+            
+            let selectedSauce = '';
+            if (product.hasSauceOptions) {
+                const sauceSelect = document.getElementById(`sauce-${productId}`);
+                selectedSauce = sauceSelect ? sauceSelect.value : '';
+            }
+
+            const item = cart.find(i => i.id === productId && i.selectedSauce === selectedSauce);
+
+            if (item) {
+                item.quantity++;
+            } else {
+                cart.push({ 
+                    ...product, 
+                    quantity: 1, 
+                    selectedSauce: selectedSauce 
+                });
+            }
+
+            updateCartUI();
+        }
+
+        // CAMBIAR CANTIDAD
+        function changeQty(productId, selectedSauce, delta) {
+            const itemIndex = cart.findIndex(i => i.id === productId && i.selectedSauce === selectedSauce);
+            if (itemIndex === -1) return;
+
+            cart[itemIndex].quantity += delta;
+            if (cart[itemIndex].quantity <= 0) {
+                cart.splice(itemIndex, 1);
+            }
+
+            updateCartUI();
+        }
+
+        // MOSTRAR U OCULTAR CAMPO DE DIRECCIÓN Y NOTAS DE ENVÍO
+        function handleDeliveryChange() {
+            const deliveryType = document.getElementById('deliveryOption').value;
+            const addressGroup = document.getElementById('addressGroup');
+            const deliveryNote = document.getElementById('deliveryNote');
+
+            if (deliveryType === 'pickup') {
+                addressGroup.style.display = 'none';
+                deliveryNote.textContent = '';
+            } else if (deliveryType === 'takeout') {
+                addressGroup.style.display = 'none';
+                deliveryNote.textContent = '📦 Costo de contenedor: $0.25 por cada combo/plato grande.';
+            } else if (deliveryType === 'carmen') {
+                addressGroup.style.display = 'block';
+                deliveryNote.textContent = '📍 Costo de envío: $2.00 adicionado al total.';
+            } else if (deliveryType === 'outside') {
+                addressGroup.style.display = 'block';
+                deliveryNote.textContent = '📞 El costo de envío fuera de la ciudad se acuerda por WhatsApp.';
+            }
+
+            updateCartUI();
+        }
+
+        // ACTUALIZAR INTERFAZ DEL CARRITO
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartTotal = document.getElementById('cartTotal');
+            const floatCount = document.getElementById('floatCount');
+            const floatTotal = document.getElementById('floatTotal');
+            const floatingBar = document.getElementById('floatingCart');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Calcular cargos adicionales (Envío o Contenedores)
+            const deliveryType = document.getElementById('deliveryOption') ? document.getElementById('deliveryOption').value : 'pickup';
+            let extraFee = 0;
+
+            if (deliveryType === 'carmen') {
+                extraFee = 2.00;
+            } else if (deliveryType === 'takeout') {
+                let largeContainersCount = cart.reduce((sum, item) => {
+                    return item.isLargeContainer ? sum + item.quantity : sum;
+                }, 0);
+                extraFee = largeContainersCount * 0.25;
+            }
+
+            const totalPrice = subtotal + extraFee;
+
+            cartBadge.textContent = totalItems;
+            floatCount.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
+            floatTotal.textContent = `$${totalPrice.toFixed(2)}`;
+            cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
+
+            if (totalItems > 0) {
+                floatingBar.classList.add('visible');
+            } else {
+                floatingBar.classList.remove('visible');
+            }
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <p>Tu carrito está vacío</p>
+                    </div>
+                `;
+                return;
+            }
+
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        ${item.selectedSauce ? `<p><i class="fa-solid fa-droplet"></i> ${item.selectedSauce}</p>` : ''}
+                        <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="changeQty(${item.id}, '${item.selectedSauce || ''}', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="qty-btn" onclick="changeQty(${item.id}, '${item.selectedSauce || ''}', 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // MOSTRAR/OCULTAR MODAL CARRITO
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('open');
+        }
+
+        // ENVIAR POR WHATSAPP
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert('Añade al menos un producto al carrito antes de hacer tu pedido.');
+                return;
+            }
+
+            const name = document.getElementById('clientName').value.trim();
+            const deliveryType = document.getElementById('deliveryOption').value;
+            const address = document.getElementById('clientAddress').value.trim();
+            const notes = document.getElementById('clientNotes').value.trim();
+
+            if (!name) {
+                alert('Por favor completa tu nombre.');
+                return;
+            }
+
+            if ((deliveryType === 'carmen' || deliveryType === 'outside') && !address) {
+                alert('Por favor ingresa la dirección de entrega.');
+                return;
+            }
+
+            const phone = "593982565003";
+
+            let deliveryText = "";
+            let extraFee = 0;
+
+            if (deliveryType === 'pickup') {
+                deliveryText = "🍽️ Comer en el local";
+            } else if (deliveryType === 'takeout') {
+                let largeContainersCount = cart.reduce((sum, item) => item.isLargeContainer ? sum + item.quantity : sum, 0);
+                extraFee = largeContainersCount * 0.25;
+                deliveryText = `🥡 Para llevar (${largeContainersCount} contenedor${largeContainersCount !== 1 ? 'es' : ''} - $${extraFee.toFixed(2)})`;
+            } else if (deliveryType === 'carmen') {
+                extraFee = 2.00;
+                deliveryText = `🛵 Domicilio en El Carmen ($2.00)\n📍 *Dirección:* ${address}`;
+            } else {
+                deliveryText = `🌐 Domicilio fuera de la ciudad (Acordar valor)\n📍 *Dirección:* ${address}`;
+            }
+
+            let message = `🍗 *NUEVO PEDIDO - CHICK & CHIPS* 🍟\n\n`;
+            message += `👤 *Cliente:* ${name}\n`;
+            message += `🛵 *Modalidad:* ${deliveryText}\n`;
+            if (notes) message += `📝 *Notas:* ${notes}\n`;
+            message += `\n*Detalle del Pedido:*\n`;
+
+            cart.forEach(item => {
+                message += `• ${item.quantity}x ${item.name}`;
+                if (item.selectedSauce) {
+                    message += ` (${item.selectedSauce})`;
+                }
+                message += ` - $${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + extraFee;
+
+            if (extraFee > 0 && deliveryType !== 'outside') {
+                message += `\n💵 *Subtotal:* $${subtotal.toFixed(2)}`;
+                if (deliveryType === 'takeout') {
+                    message += `\n🥡 *Contenedores:* $${extraFee.toFixed(2)}`;
+                } else if (deliveryType === 'carmen') {
+                    message += `\n🛵 *Envío:* $${extraFee.toFixed(2)}`;
+                }
+            }
+
+            message += `\n💰 *TOTAL:* $${total.toFixed(2)}`;
+            if (deliveryType === 'outside') {
+                message += ` *(+ envío por acordar)*`;
+            }
+            message += `\n\n¡Gracias! Quedo a la espera de la confirmación.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // INICIALIZACIÓN
+        renderMenu();
+        handleDeliveryChange();
+    </script>
+</body>
+</html>
