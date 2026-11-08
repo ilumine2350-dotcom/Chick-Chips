@@ -685,20 +685,22 @@
             <div class="cart-body" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
                 <div class="form-group">
                     <label>Categoría Arroz y Menestra:</label>
-                    <select id="adminArrozToggle" class="form-control" onchange="updateAdminSettings()">
+                    <select id="adminArrozToggle" class="form-control">
                         <option value="false">Oculta (Desactivada)</option>
                         <option value="true">Visible (Activada)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Estado de la Página:</label>
-                    <select id="adminStoreToggle" class="form-control" onchange="updateAdminSettings()">
+                    <select id="adminStoreToggle" class="form-control">
                         <option value="AUTO">Automático (11:00 a.m. a 20:00 p.m.)</option>
                         <option value="OPEN">Forzar Abierto (Disponible ahora)</option>
-                        <option value="CLOSED">Forzar Cerrado (No laborable / Días festivos)</option>
+                        <option value="CLOSED">Forzar Cerrado Global (Nadie entra)</option>
                     </select>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">Los cambios se guardan automáticamente en tu navegador.</p>
+                <button onclick="saveAdminSettingsToGitHubInfo()" class="btn-send-whatsapp" style="margin-top: 10px; background: var(--primary);">
+                    Aplicar Cambios Globales
+                </button>
             </div>
         </div>
     </div>
@@ -756,19 +758,36 @@
     </div>
 
     <script>
-        // CONFIGURACIÓN DE ADMINISTRADOR Y ESTADO
-        let arrozEnabled = localStorage.getItem('cc_arroz_enabled') === 'true';
-        let storeOverride = localStorage.getItem('cc_store_override') || 'AUTO';
+        let storeConfig = { store: "AUTO", arroz: false };
+        let currentCategory = 'todos';
+        let cart = [];
 
-        // VERIFICAR HORARIO Y ESTADO DE LA TIENDA (LÓGICA CORREGIDA)
+        // CARGAR CONFIGURACIÓN DESDE EL ARCHIVO status.json (Base de datos global)
+        async function initApp() {
+            try {
+                const response = await fetch('./status.json?t=' + new Date().getTime());
+                if (response.ok) {
+                    storeConfig = await response.json();
+                }
+            } catch (e) {
+                console.log("Usando modo por defecto");
+            }
+
+            checkStoreStatus();
+            renderCategoryNav();
+            renderMenu();
+            handleDeliveryChange();
+        }
+
+        // VERIFICAR ESTADO Y HORARIO GLOBAL
         function checkStoreStatus() {
             const closedScreen = document.getElementById('closedScreen');
             
-            if (storeOverride === 'OPEN') {
+            if (storeConfig.store === 'OPEN') {
                 closedScreen.style.display = 'none';
                 return;
             }
-            if (storeOverride === 'CLOSED') {
+            if (storeConfig.store === 'CLOSED') {
                 closedScreen.style.display = 'flex';
                 return;
             }
@@ -776,8 +795,8 @@
             // Modo automático (11:00 a.m. a 20:00 p.m.)
             const now = new Date();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            const openTime = 11 * 60; // 11:00 AM (660 minutos)
-            const closeTime = 20 * 60; // 20:00 PM (1200 minutos)
+            const openTime = 11 * 60; // 11:00 AM
+            const closeTime = 20 * 60; // 20:00 PM
 
             if (currentMinutes >= openTime && currentMinutes < closeTime) {
                 closedScreen.style.display = 'none';
@@ -797,8 +816,8 @@
         }
 
         function openAdminPanel() {
-            document.getElementById('adminArrozToggle').value = arrozEnabled.toString();
-            document.getElementById('adminStoreToggle').value = storeOverride;
+            document.getElementById('adminArrozToggle').value = storeConfig.arroz.toString();
+            document.getElementById('adminStoreToggle').value = storeConfig.store;
             document.getElementById('adminModal').classList.add('open');
         }
 
@@ -806,26 +825,26 @@
             document.getElementById('adminModal').classList.remove('open');
         }
 
-        function updateAdminSettings() {
-            arrozEnabled = document.getElementById('adminArrozToggle').value === 'true';
-            storeOverride = document.getElementById('adminStoreToggle').value;
+        function saveAdminSettingsToGitHubInfo() {
+            const newArroz = document.getElementById('adminArrozToggle').value === 'true';
+            const newStore = document.getElementById('adminStoreToggle').value;
 
-            localStorage.setItem('cc_arroz_enabled', arrozEnabled);
-            localStorage.setItem('cc_store_override', storeOverride);
-
-            renderCategoryNav();
-            checkStoreStatus();
+            const jsonText = JSON.stringify({ store: newStore, arroz: newArroz }, null, 2);
             
-            if (!arrozEnabled && currentCategory === 'arroz') {
-                filterMenu('todos', document.querySelector('.cat-btn'));
-            } else {
-                renderMenu(currentCategory);
-            }
+            // Mostrar instrucciones claras para actualizar el archivo status.json en GitHub
+            navigator.clipboard?.writeText(jsonText);
+            alert("¡Configuración copiada al portapapeles!\n\nPara aplicar el cierre global en GitHub:\n1. Entra a tu GitHub.\n2. Edita tu archivo status.json.\n3. Pega este código:\n\n" + jsonText);
+            
+            storeConfig.store = newStore;
+            storeConfig.arroz = newArroz;
+            checkStoreStatus();
+            renderCategoryNav();
+            renderMenu(currentCategory);
+            closeAdminPanel();
         }
 
         // DATOS DEL MENÚ
         const menuProducts = [
-            // COMBOS DE PAPIPOLLO
             {
                 id: 1,
                 category: 'combos',
@@ -878,7 +897,6 @@
                     'Mitad Original / Mitad Picante'
                 ]
             },
-            // COMBOS DE ARROZ Y MENESTRA
             {
                 id: 13,
                 category: 'arroz',
@@ -912,7 +930,6 @@
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
-            // COMBO HAMBURGUESA
             {
                 id: 5,
                 category: 'hamburguesa',
@@ -924,7 +941,6 @@
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
-            // COMBOS DE SALCHIPAPA
             {
                 id: 6,
                 category: 'salchipapa',
@@ -947,7 +963,6 @@
                 hasSauceOptions: false,
                 isLargeContainer: true
             },
-            // ADICIONALES
             {
                 id: 8,
                 category: 'extras',
@@ -991,10 +1006,7 @@
                 image: 'miel_mostaza.jpg',
                 hasSauceOptions: true,
                 isLargeContainer: false,
-                sauceChoices: [
-                    'Original',
-                    'Picante'
-                ]
+                sauceChoices: ['Original', 'Picante']
             },
             {
                 id: 12,
@@ -1006,15 +1018,9 @@
                 image: 'bbq.jpg',
                 hasSauceOptions: true,
                 isLargeContainer: false,
-                sauceChoices: [
-                    'Original',
-                    'Picante'
-                ]
+                sauceChoices: ['Original', 'Picante']
             }
         ];
-
-        let cart = [];
-        let currentCategory = 'todos';
 
         function handleImageError(imgElement) {
             if (imgElement.src.endsWith('.jpg')) {
@@ -1024,14 +1030,13 @@
             }
         }
 
-        // RENDERIZAR NAVEGACIÓN DINÁMICA DE CATEGORÍAS
         function renderCategoryNav() {
             const nav = document.getElementById('categoriesNav');
             let html = `
                 <button class="cat-btn ${currentCategory === 'todos' ? 'active' : ''}" onclick="filterMenu('todos', this)">🔥 Todos</button>
                 <button class="cat-btn ${currentCategory === 'combos' ? 'active' : ''}" onclick="filterMenu('combos', this)">🍗 Combos Papipollo</button>
             `;
-            if (arrozEnabled) {
+            if (storeConfig.arroz) {
                 html += `<button class="cat-btn ${currentCategory === 'arroz' ? 'active' : ''}" onclick="filterMenu('arroz', this)">🍚 Arroz y Menestra</button>`;
             }
             html += `
@@ -1042,13 +1047,12 @@
             nav.innerHTML = html;
         }
 
-        // RENDERIZAR MENÚ
         function renderMenu(category = 'todos') {
             const container = document.getElementById('menuGrid');
             container.innerHTML = '';
 
             const filtered = category === 'todos' 
-                ? menuProducts.filter(p => p.category !== 'arroz' || arrozEnabled)
+                ? menuProducts.filter(p => p.category !== 'arroz' || storeConfig.arroz)
                 : menuProducts.filter(p => p.category === category);
 
             filtered.forEach(p => {
@@ -1089,7 +1093,6 @@
             });
         }
 
-        // FILTRAR CATEGORÍAS
         function filterMenu(cat, btn) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -1097,10 +1100,8 @@
             renderMenu(cat);
         }
 
-        // AGREGAR AL CARRITO
         function addToCart(productId) {
             const product = menuProducts.find(p => p.id === productId);
-            
             let selectedSauce = '';
             if (product.hasSauceOptions) {
                 const sauceSelect = document.getElementById(`sauce-${productId}`);
@@ -1108,21 +1109,14 @@
             }
 
             const item = cart.find(i => i.id === productId && i.selectedSauce === selectedSauce);
-
             if (item) {
                 item.quantity++;
             } else {
-                cart.push({ 
-                    ...product, 
-                    quantity: 1, 
-                    selectedSauce: selectedSauce 
-                });
+                cart.push({ ...product, quantity: 1, selectedSauce: selectedSauce });
             }
-
             updateCartUI();
         }
 
-        // CAMBIAR CANTIDAD
         function changeQty(productId, selectedSauce, delta) {
             const itemIndex = cart.findIndex(i => i.id === productId && i.selectedSauce === selectedSauce);
             if (itemIndex === -1) return;
@@ -1131,11 +1125,9 @@
             if (cart[itemIndex].quantity <= 0) {
                 cart.splice(itemIndex, 1);
             }
-
             updateCartUI();
         }
 
-        // MOSTRAR U OCULTAR CAMPO DE DIRECCIÓN Y NOTAS DE ENVÍO
         function handleDeliveryChange() {
             const deliveryType = document.getElementById('deliveryOption').value;
             const addressGroup = document.getElementById('addressGroup');
@@ -1154,11 +1146,9 @@
                 addressGroup.style.display = 'block';
                 deliveryNote.textContent = '📞 El costo de envío fuera de la ciudad se acuerda por WhatsApp.';
             }
-
             updateCartUI();
         }
 
-        // ACTUALIZAR INTERFAZ DEL CARRITO
         function updateCartUI() {
             const cartItemsContainer = document.getElementById('cartItems');
             const cartBadge = document.getElementById('cartBadge');
@@ -1176,9 +1166,7 @@
             if (deliveryType === 'carmen') {
                 extraFee = 2.00;
             } else if (deliveryType === 'takeout') {
-                let largeContainersCount = cart.reduce((sum, item) => {
-                    return item.isLargeContainer ? sum + item.quantity : sum;
-                }, 0);
+                let largeContainersCount = cart.reduce((sum, item) => item.isLargeContainer ? sum + item.quantity : sum, 0);
                 extraFee = largeContainersCount * 0.25;
             }
 
@@ -1221,13 +1209,11 @@
             `).join('');
         }
 
-        // MOSTRAR/OCULTAR MODAL CARRITO
         function toggleCart() {
             const modal = document.getElementById('cartModal');
             modal.classList.toggle('open');
         }
 
-        // ENVIAR POR WHATSAPP
         function sendWhatsAppOrder() {
             if (cart.length === 0) {
                 alert('Añade al menos un producto al carrito antes de hacer tu pedido.');
@@ -1250,7 +1236,6 @@
             }
 
             const phone = "593982565003";
-
             let deliveryText = "";
             let extraFee = 0;
 
@@ -1275,9 +1260,7 @@
 
             cart.forEach(item => {
                 message += `• ${item.quantity}x ${item.name}`;
-                if (item.selectedSauce) {
-                    message += ` (${item.selectedSauce})`;
-                }
+                if (item.selectedSauce) message += ` (${item.selectedSauce})`;
                 message += ` - $${(item.price * item.quantity).toFixed(2)}\n`;
             });
 
@@ -1286,30 +1269,19 @@
 
             if (extraFee > 0 && deliveryType !== 'outside') {
                 message += `\n💵 *Subtotal:* $${subtotal.toFixed(2)}`;
-                if (deliveryType === 'takeout') {
-                    message += `\n🥡 *Contenedores:* $${extraFee.toFixed(2)}`;
-                } else if (deliveryType === 'carmen') {
-                    message += `\n🛵 *Envío:* $${extraFee.toFixed(2)}`;
-                }
+                if (deliveryType === 'takeout') message += `\n🥡 *Contenedores:* $${extraFee.toFixed(2)}`;
+                else if (deliveryType === 'carmen') message += `\n🛵 *Envío:* $${extraFee.toFixed(2)}`;
             }
 
             message += `\n💰 *TOTAL:* $${total.toFixed(2)}`;
-            if (deliveryType === 'outside') {
-                message += ` *(+ envío por acordar)*`;
-            }
+            if (deliveryType === 'outside') message += ` *(+ envío por acordar)*`;
             message += `\n\n¡Gracias! Quedo a la espera de la confirmación.`;
 
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
-
-            window.open(whatsappUrl, '_blank');
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
         // INICIALIZACIÓN
-        checkStoreStatus();
-        renderCategoryNav();
-        renderMenu();
-        handleDeliveryChange();
+        initApp();
     </script>
 </body>
 </html>
