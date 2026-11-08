@@ -80,6 +80,26 @@
             font-weight: 600;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 8px;
+            transition: color 0.2s;
+        }
+
+        .admin-icon-btn:hover {
+            color: var(--secondary);
+        }
+
         .cart-icon-btn {
             position: relative;
             background: #252525;
@@ -326,7 +346,47 @@
             background-color: var(--primary-hover);
         }
 
-        /* MODAL CARRITO */
+        /* SPLASH SCREEN / TIENDA CERRADA */
+        .closed-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .closed-screen img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .closed-screen h2 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .closed-screen p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 400px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        /* MODAL CARRITO Y ADMIN */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -553,6 +613,16 @@
 </head>
 <body>
 
+    <!-- SPLASH SCREEN / TIENDA CERRADA -->
+    <div class="closed-screen" id="closedScreen">
+        <img src="./logo.png" alt="Chick & Chips Logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23FF5232\' rx=\'20\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'40\' font-weight=\'bold\'>C&C</text></svg>';">
+        <h2>Chick & Chips</h2>
+        <p>Estaremos atendiendo tus pedidos a partir de los horarios activos de nuestra cocina.</p>
+        <button onclick="requestAdminLogin()" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 18px; border-radius: 20px; font-size: 0.8rem; cursor: pointer;">
+            <i class="fa-solid fa-lock"></i> Acceso Administrador
+        </button>
+    </div>
+
     <!-- HEADER -->
     <header>
         <div class="header-container">
@@ -563,10 +633,15 @@
                     <span>El combo perfecto de tu día</span>
                 </div>
             </div>
-            <button class="cart-icon-btn" onclick="toggleCart()">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <div class="cart-badge" id="cartBadge">0</div>
-            </button>
+            <div class="header-actions">
+                <button class="admin-icon-btn" onclick="requestAdminLogin()" title="Administración">
+                    <i class="fa-solid fa-lock"></i>
+                </button>
+                <button class="cart-icon-btn" onclick="toggleCart()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <div class="cart-badge" id="cartBadge">0</div>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -579,14 +654,9 @@
         </div>
     </section>
 
-    <!-- CATEGORÍAS -->
-    <nav class="categories-nav">
-        <button class="cat-btn active" onclick="filterMenu('todos', this)">🔥 Todos</button>
-        <button class="cat-btn" onclick="filterMenu('combos', this)">🍗 Combos Papipollo</button>
-        <button class="cat-btn" onclick="filterMenu('arroz', this)">🍚 Arroz y Menestra</button>
-        <button class="cat-btn" onclick="filterMenu('hamburguesa', this)">🍔 Hamburguesa</button>
-        <button class="cat-btn" onclick="filterMenu('salchipapa', this)">🍟 Salchipapa</button>
-        <button class="cat-btn" onclick="filterMenu('extras', this)">➕ Adicionales</button>
+    <!-- CATEGORÍAS (Se cargan dinámicamente según permisos) -->
+    <nav class="categories-nav" id="categoriesNav">
+        <!-- Generado por JavaScript -->
     </nav>
 
     <!-- MENÚ -->
@@ -603,6 +673,34 @@
             <span id="floatCount">0 items</span>
         </div>
         <div style="font-weight: 800;" id="floatTotal">$0.00</div>
+    </div>
+
+    <!-- MODAL PANEL ADMINISTRADOR -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="cart-drawer" style="max-width: 400px; height: auto; margin: auto; border-radius: 16px;">
+            <div class="cart-header">
+                <h2><i class="fa-solid fa-screwdriver-wrench" style="color: var(--primary);"></i> Panel Admin</h2>
+                <button class="close-cart" onclick="closeAdminPanel()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="cart-body" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+                <div class="form-group">
+                    <label>Categoría Arroz y Menestra:</label>
+                    <select id="adminArrozToggle" class="form-control" onchange="updateAdminSettings()">
+                        <option value="false">Oculta (Desactivada)</option>
+                        <option value="true">Visible (Activada)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Estado de la Página:</label>
+                    <select id="adminStoreToggle" class="form-control" onchange="updateAdminSettings()">
+                        <option value="AUTO">Automático (11:00 a.m. a 20:00 p.m.)</option>
+                        <option value="OPEN">Forzar Abierto (Disponible ahora)</option>
+                        <option value="CLOSED">Forzar Cerrado (No laborable / Días festivos)</option>
+                    </select>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">Los cambios se guardan automáticamente en tu navegador.</p>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL CARRITO / CHECKOUT -->
@@ -658,6 +756,73 @@
     </div>
 
     <script>
+        // CONFIGURACIÓN DE ADMINISTRADOR Y ESTADO
+        let arrozEnabled = localStorage.getItem('cc_arroz_enabled') === 'true';
+        let storeOverride = localStorage.getItem('cc_store_override') || 'AUTO';
+
+        // VERIFICAR HORARIO Y ESTADO DE LA TIENDA
+        function checkStoreStatus() {
+            const closedScreen = document.getElementById('closedScreen');
+            
+            if (storeOverride === 'OPEN') {
+                closedScreen.style.display = 'none';
+                return;
+            }
+            if (storeOverride === 'CLOSED') {
+                closedScreen.style.display = 'flex';
+                return;
+            }
+
+            // Modo automático (11:00 a.m. a 20:00 p.m.)
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const openTime = 11 * 60; // 11:00 AM
+            const closeTime = 20 * 60; // 20:00 PM
+
+            if (currentTime >= openTime && currentTime < closeTime) {
+                closedScreen.style.display = 'none';
+            } else {
+                closedScreen.style.display = 'flex';
+            }
+        }
+
+        // ACCESO DE ADMINISTRADOR
+        function requestAdminLogin() {
+            const code = prompt("Ingrese código de administrador:");
+            if (code === "23504381") {
+                openAdminPanel();
+            } else if (code !== null) {
+                alert("Código incorrecto.");
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('adminArrozToggle').value = arrozEnabled.toString();
+            document.getElementById('adminStoreToggle').value = storeOverride;
+            document.getElementById('adminModal').classList.add('open');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.remove('open');
+        }
+
+        function updateAdminSettings() {
+            arrozEnabled = document.getElementById('adminArrozToggle').value === 'true';
+            storeOverride = document.getElementById('adminStoreToggle').value;
+
+            localStorage.setItem('cc_arroz_enabled', arrozEnabled);
+            localStorage.setItem('cc_store_override', storeOverride);
+
+            renderCategoryNav();
+            checkStoreStatus();
+            
+            if (!arrozEnabled && currentCategory === 'arroz') {
+                filterMenu('todos', document.querySelector('.cat-btn'));
+            } else {
+                renderMenu(currentCategory);
+            }
+        }
+
         // DATOS DEL MENÚ
         const menuProducts = [
             // COMBOS DE PAPIPOLLO
@@ -688,7 +853,7 @@
                 category: 'combos',
                 name: 'Combo 3 Presas',
                 desc: '3 Presas de pollo frito + papas fritas + Pepsi personal',
-                price: 4.85,
+                price: 4.80,
                 badge: 'Más vendido',
                 image: 'combo3.jpg',
                 hasSauceOptions: false,
@@ -730,7 +895,7 @@
                 category: 'arroz',
                 name: 'Combo Más Vendido',
                 desc: '2 presas, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
-                price: 4.95,
+                price: 4.50,
                 badge: 'Más vendido',
                 image: 'combo_mas_vendido.jpg',
                 hasSauceOptions: false,
@@ -741,7 +906,7 @@
                 category: 'arroz',
                 name: 'Mega Combo Alitas',
                 desc: 'Presa de pollo más 3 alitas, arroz, menestra, ensalada de lechuga y tomate, Pepsi personal',
-                price: 4.50,
+                price: 4.26,
                 badge: 'Especial',
                 image: 'mega_combo_alitas.jpg',
                 hasSauceOptions: false,
@@ -849,6 +1014,7 @@
         ];
 
         let cart = [];
+        let currentCategory = 'todos';
 
         function handleImageError(imgElement) {
             if (imgElement.src.endsWith('.jpg')) {
@@ -858,12 +1024,31 @@
             }
         }
 
+        // RENDERIZAR NAVEGACIÓN DINÁMICA DE CATEGORÍAS
+        function renderCategoryNav() {
+            const nav = document.getElementById('categoriesNav');
+            let html = `
+                <button class="cat-btn ${currentCategory === 'todos' ? 'active' : ''}" onclick="filterMenu('todos', this)">🔥 Todos</button>
+                <button class="cat-btn ${currentCategory === 'combos' ? 'active' : ''}" onclick="filterMenu('combos', this)">🍗 Combos Papipollo</button>
+            `;
+            if (arrozEnabled) {
+                html += `<button class="cat-btn ${currentCategory === 'arroz' ? 'active' : ''}" onclick="filterMenu('arroz', this)">🍚 Arroz y Menestra</button>`;
+            }
+            html += `
+                <button class="cat-btn ${currentCategory === 'hamburguesa' ? 'active' : ''}" onclick="filterMenu('hamburguesa', this)">🍔 Hamburguesa</button>
+                <button class="cat-btn ${currentCategory === 'salchipapa' ? 'active' : ''}" onclick="filterMenu('salchipapa', this)">🍟 Salchipapa</button>
+                <button class="cat-btn ${currentCategory === 'extras' ? 'active' : ''}" onclick="filterMenu('extras', this)">➕ Adicionales</button>
+            `;
+            nav.innerHTML = html;
+        }
+
+        // RENDERIZAR MENÚ
         function renderMenu(category = 'todos') {
             const container = document.getElementById('menuGrid');
             container.innerHTML = '';
 
             const filtered = category === 'todos' 
-                ? menuProducts 
+                ? menuProducts.filter(p => p.category !== 'arroz' || arrozEnabled)
                 : menuProducts.filter(p => p.category === category);
 
             filtered.forEach(p => {
@@ -904,12 +1089,15 @@
             });
         }
 
+        // FILTRAR CATEGORÍAS
         function filterMenu(cat, btn) {
+            currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if (btn) btn.classList.add('active');
             renderMenu(cat);
         }
 
+        // AGREGAR AL CARRITO
         function addToCart(productId) {
             const product = menuProducts.find(p => p.id === productId);
             
@@ -934,6 +1122,7 @@
             updateCartUI();
         }
 
+        // CAMBIAR CANTIDAD
         function changeQty(productId, selectedSauce, delta) {
             const itemIndex = cart.findIndex(i => i.id === productId && i.selectedSauce === selectedSauce);
             if (itemIndex === -1) return;
@@ -946,6 +1135,7 @@
             updateCartUI();
         }
 
+        // MOSTRAR U OCULTAR CAMPO DE DIRECCIÓN Y NOTAS DE ENVÍO
         function handleDeliveryChange() {
             const deliveryType = document.getElementById('deliveryOption').value;
             const addressGroup = document.getElementById('addressGroup');
@@ -968,6 +1158,7 @@
             updateCartUI();
         }
 
+        // ACTUALIZAR INTERFAZ DEL CARRITO
         function updateCartUI() {
             const cartItemsContainer = document.getElementById('cartItems');
             const cartBadge = document.getElementById('cartBadge');
@@ -1030,11 +1221,13 @@
             `).join('');
         }
 
+        // MOSTRAR/OCULTAR MODAL CARRITO
         function toggleCart() {
             const modal = document.getElementById('cartModal');
             modal.classList.toggle('open');
         }
 
+        // ENVIAR POR WHATSAPP
         function sendWhatsAppOrder() {
             if (cart.length === 0) {
                 alert('Añade al menos un producto al carrito antes de hacer tu pedido.');
@@ -1112,6 +1305,9 @@
             window.open(whatsappUrl, '_blank');
         }
 
+        // INICIALIZACIÓN
+        checkStoreStatus();
+        renderCategoryNav();
         renderMenu();
         handleDeliveryChange();
     </script>
