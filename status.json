@@ -1,4 +1,10 @@
 {
   "store": "AUTO",
   "arroz": false
+
+  /////{
+  store: CLOSED
+  arroz: fals
+  store: OPEN
+  arroz://///
 }
