@@ -395,7 +395,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
-            z-index: 1000;
+            z-index: 3000;
             display: none;
             justify-content: flex-end;
         }
@@ -760,7 +760,7 @@
         let arrozEnabled = localStorage.getItem('cc_arroz_enabled') === 'true';
         let storeOverride = localStorage.getItem('cc_store_override') || 'AUTO';
 
-        // VERIFICAR HORARIO Y ESTADO DE LA TIENDA
+        // VERIFICAR HORARIO Y ESTADO DE LA TIENDA (LÓGICA CORREGIDA)
         function checkStoreStatus() {
             const closedScreen = document.getElementById('closedScreen');
             
@@ -775,11 +775,11 @@
 
             // Modo automático (11:00 a.m. a 20:00 p.m.)
             const now = new Date();
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            const openTime = 11 * 60; // 11:00 AM
-            const closeTime = 20 * 60; // 20:00 PM
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const openTime = 11 * 60; // 11:00 AM (660 minutos)
+            const closeTime = 20 * 60; // 20:00 PM (1200 minutos)
 
-            if (currentTime >= openTime && currentTime < closeTime) {
+            if (currentMinutes >= openTime && currentMinutes < closeTime) {
                 closedScreen.style.display = 'none';
             } else {
                 closedScreen.style.display = 'flex';
